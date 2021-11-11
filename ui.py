@@ -1,3 +1,8 @@
+"""
+TODO:::
+    MAKE VALVE SETTINGS WORK
+"""
+
 import tkinter as tk
 from tkinter.constants import LEFT, WORD, Y
 import sys
@@ -5,19 +10,22 @@ sys.path.append(".")
 from controls import Controls
 from saveData import SaveData
 
+FRAME_WIDTH = 800
+FRAME_HEIGHT = 600
+
 class MainFrame(tk.Frame):
     def __init__(self, master=None, controls=None, saveData=None):
-        super().__init__(master, width=1600, height=900)
+        super().__init__(master)
         self.master = master
         self.controls = controls
         self.saveData = saveData
-        self.width = 1600
-        self.height = 900
         self.pack()
-        self.init()
+        self.openMainScreen()
         
         
-    def mainScreen(self):
+    def openMainScreen(self):
+        self.destroyWidgets()
+
         self.startButton = tk.Button(self,
                                     text="Start Timers",
                                     command=self.controls.startTimers,
@@ -37,34 +45,43 @@ class MainFrame(tk.Frame):
                                     pady=10).pack(pady=50)
     
     def openControlsScreen(self):
-        self.pack_forget()
+        self.destroyWidgets()
 
-        self.showValvesButton = tk.Button(self,
-                                    text="Valve Settings",
-                                    command=self.openValvesScreen,
-                                    padx = 100,
-                                    pady=10).pack(pady=20)
+        self.showValvesButton = tk.Button(  self,
+                                            text="Valve Settings",
+                                            command=self.openValvesScreen,
+                                            padx = 100,
+                                            pady=10).pack(pady=20)
         
         self.showLightsButton = tk.Button(self,
-                                    text="Light Settings",
-                                    command=self.openLightsScreen,
-                                    padx = 100,
-                                    pady=10).pack(pady=20)
+                                            text="Light Settings",
+                                        command=self.openLightsScreen,
+                                        padx = 100,
+                                        pady=10).pack(pady=20)
     
     def openValvesScreen(self):
-        self.pack_forget()
+        self.destroyWidgets()
 
-        self.infoText = tk.Text(self, wrap=WORD)
-        self.infoText.insert('end', self.saveData.readValveData())
 
-        self.sb = tk.Scrollbar(self, command=self.infoText.yview)
-        self.sb.pack(side=LEFT, fill=Y)
+        infoscroll = tk.Scrollbar(self)
+
+        self.infoText = tk.Text(    self,
+                                    wrap=tk.WORD,
+                                    width=20,
+                                    yscrollcommand=infoscroll.set)
+
+        self.infoText.insert(tk.END, self.saveData.readValveData())
+        self.infoText.pack(side=tk.LEFT, fill=tk.Y)
 
         self.addButtonLabel = tk.Label(self,
                                         text="Add Button: ")
     
     def openLightsScreen(self):
         pass
+
+    def destroyWidgets(self):
+        for widget in self.winfo_children():
+            widget.destroy()
 
 
 
