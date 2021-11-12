@@ -8,6 +8,8 @@ class Controls:
     def __init__(self, settings) -> None:
         self.valves = settings.valves
         self.lights = settings.lights
+        self.valvenumiter = settings.valvenumiter
+        self.lightnumiter = settings.lightnumiter
     
     def startTimers(self):
         for valve in self.valves:
@@ -25,10 +27,8 @@ class Controls:
         for light in self.lights:
             light.on = False
     
-    
-    
     def addValve(self):
-        self.valves.append(Valve(self.numiter))
+        self.valves.append(Valve(self.valvenumiter))
         self.valvenumiter += 1
 
     def modifyValve(self, num, hours, minutes, pour_time):
@@ -38,9 +38,9 @@ class Controls:
         print("Valve Saved Time Settings:")
         for s in self.valves:
             s.readData()
-    
+
     def addLight(self):
-        self.lights.append(Light(self.numiter))
+        self.lights.append(Light(self.lightnumiter))
         self.lightnumiter += 1
     
     def modifyLight(self, num, hours_on, minutes_on, hours_off, minutes_off):
